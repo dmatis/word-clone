@@ -1,18 +1,23 @@
 import React from "react";
 import { range } from "../../utils";
 import { WORD_LENGTH } from "../../constants";
+import { checkGuess } from "../../game-helpers";
 
-function Guess({ value, wordStatus }) {
-  console.log({ wordStatus });
+function Cell({ letter, status }) {
+  const className = status ? `cell ${status}` : "cell";
+  return <span className={className}>{letter}</span>;
+}
+
+function Guess({ value, answer }) {
+  const result = checkGuess(value, answer);
   return (
     <p className="guess">
       {range(WORD_LENGTH).map((num) => (
-        <span
+        <Cell
           key={num}
-          className={`cell${wordStatus ? ` ${wordStatus[num].status}` : ""}`}
-        >
-          {value ? value[num] : undefined}
-        </span>
+          letter={result ? result[num].letter : undefined}
+          status={result ? result[num].status : undefined}
+        />
       ))}
     </p>
   );
