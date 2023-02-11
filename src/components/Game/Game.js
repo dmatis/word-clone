@@ -6,10 +6,11 @@ import GuessInput from "../GuessInput";
 import GuessResults from "../GuessResults";
 import WonBanner from "../WonBanner";
 import LostBanner from "../LostBanner";
+import RestartButton from "../RestartButton";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
 // Pick a random word on every pageload.
-const answer = sample(WORDS);
+let answer = sample(WORDS);
 // To make debugging easier, we'll log the solution in the console.
 console.info({ answer });
 
@@ -30,9 +31,18 @@ function Game() {
     }
   };
 
+  function onClickRestartHandler() {
+    setGameStatus("running");
+    setGuesses([]);
+    answer = sample(WORDS);
+  }
+
   return (
     <>
       <GuessResults guesses={guesses} answer={answer} />
+      {gameStatus !== "running" && (
+        <RestartButton onClickHandler={onClickRestartHandler} />
+      )}
       <GuessInput submitGuess={handleSubmitGuess} gameStatus={gameStatus} />
       {gameStatus === "won" && <WonBanner numGuesses={guesses.length} />}
       {gameStatus === "lost" && <LostBanner answer={answer} />}
